@@ -1,12 +1,18 @@
 import { LitElement, html, css } from 'lit-element'
 
 export class GristStyleTool extends LitElement {
-  static get styles() {}
+  static get styles() {
+    return []
+  }
 
-  static get properties() {}
+  static get properties() {
+    return {}
+  }
 
   render() {
-    return html``
+    return html`
+      STYLES...
+    `
   }
 }
 

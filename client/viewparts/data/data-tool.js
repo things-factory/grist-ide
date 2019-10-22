@@ -36,7 +36,7 @@ export class GristDataTool extends LitElement {
 
   firstUpdated() {
     this.page = 1
-    this.limit = 200
+    this.limit = 20
 
     this.config = this.gristConfig
 
