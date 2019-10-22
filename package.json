@@ -1,0 +1,38 @@
+{
+  "name": "@things-factory/grist-ide",
+  "version": "1.0.0",
+  "main": "dist-server/index.js",
+  "browser": "client/index.js",
+  "things-factory": true,
+  "license": "MIT",
+  "author": "",
+  "scripts": {
+    "serve": "things-factory",
+    "serve:dev": "npm run build:server && things-factory-dev",
+    "start:app": "things-factory-app",
+    "start:app:android": "things-factory-app --platform=android",
+    "emulate:app": "things-factory-app --emulate",
+    "emulate:app:android": "things-factory-app --emulate --platform=android",
+    "build:app:android": "things-factory-app --platform=android --mode=build",
+    "build": "npm run build:server && npm run build:client",
+    "build:client": "npm run clean:client && webpack --config node_modules/@things-factory/shell/webpack.config.js",
+    "build:server": "npm run clean:server && tsc",
+    "clean:server": "rm -rf dist-server",
+    "clean:client": "rm -rf dist-client",
+    "clean": "npm run clean:server && npm run clean:client",
+    "prepublish": "npm run build:server",
+    "migration": "npm run build:server && things-factory-migration",
+    "migration:create": "node ./node_modules/typeorm/cli.js migration:create",
+    "migration:generate": "node ./node_modules/typeorm/cli.js migration:generate",
+    "migration:run": "node ./node_modules/typeorm/cli.js migration:run",
+    "migration:revert": "node ./node_modules/typeorm/cli.js migration:revert"
+  },
+  "dependencies": {
+    "@things-factory/apptool-ui": "*",
+    "@things-factory/context-ui": "*",
+    "@things-factory/grist-ui": "*",
+    "@things-factory/layout-ui": "*",
+    "@things-factory/shell": "*"
+  },
+  "devDependencies": {}
+}

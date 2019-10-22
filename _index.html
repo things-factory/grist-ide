@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Things Factory App</title>
+    <meta name="generator" content="Things Factory Starter Kit" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Things Factory description" />
+
+    <base href="/" />
+
+    <link rel="icon" href="assets/favicon.ico" />
+
+    <!-- See https://goo.gl/OOhYW5 -->
+    <link rel="manifest" href="assets/manifest.json" />
+
+    <!-- See https://goo.gl/qRE0vM -->
+    <meta name="theme-color" content="#22a6a7" />
+
+    <!-- Add to homescreen for Chrome on Android. Fallback for manifest.json -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="Things Factory" />
+    <meta name="application-description" content="Reimagining Software - Things Factory Micro-module Edition" />
+    <meta name="application-copyright" content="Copyright © hatiolab.com. All Rights Reserved." />
+    <link rel="application-icon" href="assets/manifest/icon-96x96.png" />
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Things Factory" />
+
+    <!-- Homescreen icons -->
+    <link rel="apple-touch-icon" href="assets/manifest/icon-48x48.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="assets/manifest/icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="96x96" href="assets/manifest/icon-96x96.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="assets/manifest/icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="assets/manifest/icon-192x192.png" />
+
+    <!-- Tile icon for Windows 8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="assets/manifest/icon-144x144.png" />
+    <meta name="msapplication-TileColor" content="#3f51b5" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <!-- Default twitter cards -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@username" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="things-app" />
+    <meta property="og:image" content="assets/manifest/icon-144x144.png" />
+
+    <!-- Performance tip: hint to the browser to start the handshake for the fonts site -->
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" rel="stylesheet" />
+
+    <script>
+      // Load and register pre-caching Service Worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('service-worker.js', {
+            scope: '/'
+          })
+        })
+      }
+
+      // Redux assumes `process.env.NODE_ENV` exists in the ES module build.
+      // https://github.com/reactjs/redux/issues/2907
+      window.process = { env: { NODE_ENV: 'production' } }
+    </script>
+
+    <!-- Add any global styles for body, document, etc. -->
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+
+        /* This is a font-stack that tries to use the system-default sans-serifs first */
+        font-family: Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+    </style>
+  </head>
+  <body>
+    <things-app appTitle="Things Factory"></things-app>
+    <noscript>
+      Please enable JavaScript to view this website.
+    </noscript>
+    <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
+    <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="node_modules/web-animations-js/web-animations-next.min.js"></script>
+    <script src="node_modules/@hatiolab/things-scene/things-scene-min.js"></script>
+    <!-- Built with love using PWA Starter Kit -->
+
+    <script src="licenses/things-lic.js"></script>
+
+    <script>
+      function urlBase64ToUint8Array(base64String) {
+        var padding = '='.repeat((4 - (base64String.length % 4)) % 4)
+        var base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/')
+
+        var rawData = window.atob(base64)
+        var outputArray = new Uint8Array(rawData.length)
+
+        for (var i = 0; i < rawData.length; ++i) {
+          outputArray[i] = rawData.charCodeAt(i)
+        }
+        return outputArray
+      }
+
+      navigator.serviceWorker.ready
+        .then(function(registration) {
+          console.log('service worker registered')
+
+          return registration.pushManager.getSubscription()
+        })
+        .then(function(subscription) {
+          if (subscription) {
+            console.log('Already subscribed', subscription.endpoint)
+            // setUnsubscribeButton()
+            unsubscribe()
+          }
+          subscribe()
+        })
+
+      function subscribe() {
+        navigator.serviceWorker.ready
+          .then(async function(registration) {
+            const response = await fetch('./vapidPublicKey')
+            const vapidPublicKey = await response.text()
+
+            const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey)
+
+            return registration.pushManager.subscribe({
+              userVisibleOnly: true,
+              applicationServerKey: convertedVapidKey
+            })
+          })
+          .then(function(subscription) {
+            console.log('Subscribed', subscription.endpoint)
+            return fetch('register', {
+              method: 'post',
+              headers: {
+                'Content-type': 'application/json'
+              },
+              body: JSON.stringify({
+                subscription: subscription
+              })
+            })
+          })
+          .then(() => {})
+      }
+
+      function unsubscribe() {
+        navigator.serviceWorker.ready
+          .then(function(registration) {
+            return registration.pushManager.getSubscription()
+          })
+          .then(function(subscription) {
+            return subscription.unsubscribe().then(function() {
+              console.log('Unsubscribed', subscription.endpoint)
+              return fetch('unregister', {
+                method: 'post',
+                headers: {
+                  'Content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                  subscription: subscription
+                })
+              })
+            })
+          })
+          .then(() => {})
+      }
+    </script>
+  </body>
+</html>
