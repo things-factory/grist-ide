@@ -64,18 +64,6 @@ export class GristDataTool extends LitElement {
             description: idx % 2 ? `hatiolab manager-${start + idx + 1}` : `hatiosea manager-${start + idx + 1}`,
             email: idx % 2 ? `shnam-${start + idx + 1}@gmail.com` : `heartyoh-${start + idx + 1}@gmail.com`,
             active: Math.round(Math.random() * 2) % 2 ? true : false,
-            company:
-              idx % 2
-                ? {
-                    id: '2',
-                    name: 'HatioLAB',
-                    description: `경기도 성남시-${start + idx + 1}`
-                  }
-                : {
-                    id: '3',
-                    name: 'HatioSEA',
-                    description: `말레이시아 세티아알람-${start + idx + 1}`
-                  },
             role: ['admin', 'worker', 'tester'][idx % 3],
             color: idx % 2 ? `#87f018` : `#180f87`,
             rate: Math.round(Math.random() * 100),
@@ -177,18 +165,6 @@ export class GristDataTool extends LitElement {
           }
         },
         {
-          type: 'id',
-          name: 'company',
-          header: 'company',
-          record: {
-            align: 'center',
-            editable: true,
-            options: {}
-          },
-          sortable: true,
-          width: 240
-        },
-        {
           type: 'boolean',
           name: 'active',
           header: 'active',
@@ -252,7 +228,7 @@ export class GristDataTool extends LitElement {
         {
           type: 'select',
           name: 'dynamicType',
-          header: 'dynamic_type',
+          header: 'dynamic type',
           record: {
             align: 'center',
             editable: true,
@@ -263,7 +239,7 @@ export class GristDataTool extends LitElement {
         {
           type: 'string',
           name: 'dynamicValue',
-          header: 'dynamic_value',
+          header: 'dynamic value',
           record: {
             align: 'center',
             editable: true,
@@ -279,7 +255,7 @@ export class GristDataTool extends LitElement {
         {
           type: 'datetime',
           name: 'updatedAt',
-          header: 'updated_at',
+          header: 'updated at',
           record: {
             align: 'center',
             editable: true
@@ -290,7 +266,7 @@ export class GristDataTool extends LitElement {
         {
           type: 'datetime',
           name: 'createdAt',
-          header: 'created_at',
+          header: 'created at',
           record: {
             align: 'center',
             editable: true

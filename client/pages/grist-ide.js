@@ -3,26 +3,7 @@ import { connect } from 'pwa-helpers/connect-mixin.js'
 import { store, PageView } from '@things-factory/shell'
 import { getRenderer, getEditor } from '@things-factory/grist-ui'
 
-class GristIde extends connect(store)(PageView) {
-  static get styles() {
-    return [
-      css`
-        :host {
-          display: flex;
-          flex-direction: column;
-
-          overflow: hidden;
-        }
-
-        data-grist {
-          flex: 1;
-
-          overflow-y: hidden;
-        }
-      `
-    ]
-  }
-
+export class GristIde extends connect(store)(PageView) {
   static get properties() {
     return {
       config: Object,
@@ -30,23 +11,11 @@ class GristIde extends connect(store)(PageView) {
     }
   }
 
-  get grist() {
-    return this.shadowRoot.querySelector('data-grist')
-  }
-
-  firstUpdated() {
+  pageInitialized() {
     this.page = 1
     this.limit = 20
 
     this.config = this.gristConfig
-
-    this.grist.fetch()
-  }
-
-  render() {
-    return html`
-      <data-grist mode="GRID" .config=${this.config} .fetchHandler=${this.fetchHandler}></data-grist>
-    `
   }
 
   async fetchHandler({ page, limit, sorters = [] }) {
@@ -64,18 +33,6 @@ class GristIde extends connect(store)(PageView) {
             description: idx % 2 ? `hatiolab manager-${start + idx + 1}` : `hatiosea manager-${start + idx + 1}`,
             email: idx % 2 ? `shnam-${start + idx + 1}@gmail.com` : `heartyoh-${start + idx + 1}@gmail.com`,
             active: Math.round(Math.random() * 2) % 2 ? true : false,
-            company:
-              idx % 2
-                ? {
-                    id: '2',
-                    name: 'HatioLAB',
-                    description: `경기도 성남시-${start + idx + 1}`
-                  }
-                : {
-                    id: '3',
-                    name: 'HatioSEA',
-                    description: `말레이시아 세티아알람-${start + idx + 1}`
-                  },
             role: ['admin', 'worker', 'tester'][idx % 3],
             color: idx % 2 ? `#87f018` : `#180f87`,
             rate: Math.round(Math.random() * 100),
@@ -177,18 +134,6 @@ class GristIde extends connect(store)(PageView) {
           }
         },
         {
-          type: 'id',
-          name: 'company',
-          header: 'company',
-          record: {
-            align: 'center',
-            editable: true,
-            options: {}
-          },
-          sortable: true,
-          width: 240
-        },
-        {
           type: 'boolean',
           name: 'active',
           header: 'active',
@@ -252,7 +197,7 @@ class GristIde extends connect(store)(PageView) {
         {
           type: 'select',
           name: 'dynamicType',
-          header: 'dynamic_type',
+          header: 'dynamic type',
           record: {
             align: 'center',
             editable: true,
@@ -263,7 +208,7 @@ class GristIde extends connect(store)(PageView) {
         {
           type: 'string',
           name: 'dynamicValue',
-          header: 'dynamic_value',
+          header: 'dynamic value',
           record: {
             align: 'center',
             editable: true,
@@ -279,7 +224,7 @@ class GristIde extends connect(store)(PageView) {
         {
           type: 'datetime',
           name: 'updatedAt',
-          header: 'updated_at',
+          header: 'updated at',
           record: {
             align: 'center',
             editable: true
@@ -290,7 +235,7 @@ class GristIde extends connect(store)(PageView) {
         {
           type: 'datetime',
           name: 'createdAt',
-          header: 'created_at',
+          header: 'created at',
           record: {
             align: 'center',
             editable: true
@@ -323,13 +268,7 @@ class GristIde extends connect(store)(PageView) {
     }
   }
 
-  get context() {
-    return {
-      title: 'Grist IDE'
-    }
+  stateChanged(state) {
+    // this.config = state.config
   }
-
-  stateChanged(state) {}
 }
-
-window.customElements.define('grist-ide', GristIde)
