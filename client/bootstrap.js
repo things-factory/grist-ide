@@ -14,6 +14,7 @@ export default function bootstrap() {
     name: 'config-tool',
     viewpart: {
       show: true,
+      resizable: true,
       template: html`
         <grist-config-tool></grist-config-tool>
       `
@@ -25,6 +26,7 @@ export default function bootstrap() {
     name: 'property-tool',
     viewpart: {
       show: true,
+      resizable: true,
       template: html`
         <grist-property-tool></grist-property-tool>
       `
@@ -36,6 +38,7 @@ export default function bootstrap() {
     name: 'data-tool',
     viewpart: {
       show: true,
+      resizable: true,
       template: html`
         <grist-data-tool></grist-data-tool>
       `

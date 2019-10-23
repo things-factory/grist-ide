@@ -13,7 +13,7 @@ export class GristConfigTool extends LitElement {
           height: 100%;
 
           display: block;
-          max-width: 20vw;
+          width: 20vw;
 
           overflow: auto;
         }
