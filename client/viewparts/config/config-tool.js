@@ -19,7 +19,7 @@ export class GristConfigTool extends LitElement {
         }
 
         [tree] {
-          margin: 20px;
+          margin: 15px;
           padding: 0;
 
           list-style: none;
