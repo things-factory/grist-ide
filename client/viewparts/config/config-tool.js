@@ -16,8 +16,6 @@ export class GristConfigTool extends connect(store)(LitElement) {
 
           display: block;
           width: 20vw;
-
-          overflow: auto;
         }
 
         [tree] {
@@ -40,37 +38,68 @@ export class GristConfigTool extends connect(store)(LitElement) {
     this.config = state.grist && state.grist.config
   }
 
+  renderSorters() {
+    var sorters = this.config.sorters || []
+
+    return sorters.map(
+      sorter => html`
+        <li><a>${sorter.name}-${sorter.descending ? 'desc' : 'asc'}</a></li>
+      `
+    )
+  }
+
+  renderColumn(column) {
+    return html`
+      <li><a>${column.type == 'gutter' ? column.gutterName : column.name}</a></li>
+    `
+  }
+
+  renderList() {
+    var { fields = [] } = this.config.list || {}
+
+    return fields.map(
+      field => html`
+        <li><a>${field}</a></li>
+      `
+    )
+  }
+
+  // appendable,
+  // insertable,
+  // selectable,
+  // handlers: {
+  //   click: getHandler(click),
+  //   dblclick: getHandler(dblclick)
+  // }
+
   render() {
+    var { columns = [] } = this.config || {}
+
     return html`
       <ul tree>
-        <li><a>Parent 1</a></li>
-        <li><a>Parent 2</a></li>
         <li>
-          <a>Parent 3</a>
+          <a>columns</a>
           <ul>
-            <li>
-              <a>1st Child of 3</a>
-              <ul>
-                <li><a>1st grandchild</a></li>
-                <li>
-                  <a>2nd grandchild</a>
-                  <ul>
-                    <li><a>1st grand-grandchild</a></li>
-                    <li><a>2nd grand-grandchild</a></li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-            <li><a>2nd Child of 3</a></li>
-            <li><a>3rd Child of 3</a></li>
+            ${columns.map(column => this.renderColumn(column))}
           </ul>
         </li>
         <li>
-          <a>Parent 4</a>
-          <ul>
-            <li><a>Parent 4's only child</a></li>
-          </ul>
+          <a>rows</a>
         </li>
+        <li>
+          <a>sorters</a>
+          ${this.renderSorters()}
+        </li>
+        <li>
+          <a>pagination</a>
+        </li>
+        <li>
+          <a>list</a>
+        </li>
+        <li>
+          <a>grid</a>
+        </li>
+        <li><a>imex</a></li>
       </ul>
     `
   }

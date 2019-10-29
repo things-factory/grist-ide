@@ -37,7 +37,7 @@ body {
   --scrollbar-thumb-hover-color: var(--primary-color);
 
   /* app layout style */
-  --app-grid-template-area: 'header header header' 'nav main aside' 'footer footer footer';
+  --app-grid-template-area: 'header header header' 'nav main aside' 'nav footer footer';
 
   /* subtitle style */
   --subtitle-padding: 12px 5px 3px 5px;
