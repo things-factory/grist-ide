@@ -1,8 +1,8 @@
 import { html, css } from 'lit-element'
 
-import { GristIde } from './grist-ide'
+import { GristIdePage } from './grist-ide-abstract'
 
-class GristIdeGrid extends GristIde {
+class GristIdeGrid extends GristIdePage {
   static get styles() {
     return [
       css`

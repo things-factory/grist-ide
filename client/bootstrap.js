@@ -8,6 +8,9 @@ import { store } from '@things-factory/shell'
 import { TOOL_POSITION } from '@things-factory/layout-base'
 import { appendViewpart, VIEWPART_POSITION } from '@things-factory/layout-base'
 import { APPEND_APP_TOOL } from '@things-factory/apptool-base'
+import grist from './reducers/grist-ide'
+import { UPDATE_GRIST_CONFIG, UPDATE_GRIST_FETCH_HANDLER } from './actions/grist-ide'
+import { getGristConfig, fetchHandler } from './sample-config'
 
 export default function bootstrap() {
   appendViewpart({
@@ -46,6 +49,10 @@ export default function bootstrap() {
     position: VIEWPART_POSITION.FOOTERBAR
   })
 
+  store.addReducers({
+    grist: grist
+  })
+
   store.dispatch({
     type: APPEND_APP_TOOL,
     tool: {
@@ -57,6 +64,7 @@ export default function bootstrap() {
       position: TOOL_POSITION.REAR
     }
   })
+
   store.dispatch({
     type: APPEND_APP_TOOL,
     tool: {
@@ -78,5 +86,15 @@ export default function bootstrap() {
       `,
       position: TOOL_POSITION.REAR
     }
+  })
+
+  store.dispatch({
+    type: UPDATE_GRIST_CONFIG,
+    config: getGristConfig({ limit: 20 })
+  })
+
+  store.dispatch({
+    type: UPDATE_GRIST_FETCH_HANDLER,
+    fetchHandler: fetchHandler
   })
 }

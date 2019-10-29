@@ -1,8 +1,10 @@
 import { LitElement, html, css, unsafeCSS } from 'lit-element'
+import { connect } from 'pwa-helpers/connect-mixin.js'
+import { store } from '@things-factory/shell'
 
 import TreeStyle from '!!text-loader!./tree-style.css'
 
-export class GristConfigTool extends LitElement {
+export class GristConfigTool extends connect(store)(LitElement) {
   static get styles() {
     return [
       css`
@@ -29,7 +31,13 @@ export class GristConfigTool extends LitElement {
   }
 
   static get properties() {
-    return {}
+    return {
+      config: Object /* grist configuration */
+    }
+  }
+
+  stateChanged(state) {
+    this.config = state.grist && state.grist.config
   }
 
   render() {
