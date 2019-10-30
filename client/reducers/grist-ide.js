@@ -1,10 +1,15 @@
-import { UPDATE_GRIST_CONFIG, UPDATE_GRIST_FETCH_HANDLER } from '../actions/grist-ide.js'
+import {
+  UPDATE_GRIST_CONFIG,
+  UPDATE_GRIST_FETCH_HANDLER,
+  UPDATE_GRIST_CONFIG_CURRENT_NODE
+} from '../actions/grist-ide.js'
 
 const noop = () => {}
 
 const INITIAL_STATE = {
   config: {},
-  fetchHandler: noop
+  fetchHandler: noop,
+  node: {}
 }
 
 const grist = (state = INITIAL_STATE, action) => {
@@ -19,6 +24,12 @@ const grist = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         fetchHandler: action.fetchHandler
+      }
+
+    case UPDATE_GRIST_CONFIG_CURRENT_NODE:
+      return {
+        ...state,
+        node: action.node
       }
 
     default:

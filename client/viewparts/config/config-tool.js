@@ -3,6 +3,7 @@ import { connect } from 'pwa-helpers/connect-mixin.js'
 import { store } from '@things-factory/shell'
 
 import TreeStyle from '!!text-loader!./tree-style.css'
+import { ContextMenu } from '../../elements/context-menu'
 
 export class GristConfigTool extends connect(store)(LitElement) {
   static get styles() {
@@ -30,12 +31,14 @@ export class GristConfigTool extends connect(store)(LitElement) {
 
   static get properties() {
     return {
-      config: Object /* grist configuration */
+      config: Object /* grist configuration */,
+      node: Object
     }
   }
 
   stateChanged(state) {
-    this.config = state.grist && state.grist.config
+    this.config = state.grist.config
+    this.node = state.grist.node
   }
 
   renderSorters() {
@@ -43,14 +46,25 @@ export class GristConfigTool extends connect(store)(LitElement) {
 
     return sorters.map(
       sorter => html`
-        <li><a>${sorter.name}-${sorter.descending ? 'desc' : 'asc'}</a></li>
+        <li><a data-type="sorter" data-name=${sorter.name}>${sorter.name}-${sorter.descending ? 'desc' : 'asc'}</a></li>
       `
     )
   }
 
   renderColumn(column) {
+    var { name, type } =
+      column.type !== 'gutter'
+        ? {
+            name: column.name,
+            type: 'column'
+          }
+        : {
+            name: column.gutterName,
+            type: 'gutter'
+          }
+
     return html`
-      <li><a>${column.type == 'gutter' ? column.gutterName : column.name}</a></li>
+      <li><a data-type=${type} data-name=${name}>${name}</a></li>
     `
   }
 
@@ -68,7 +82,7 @@ export class GristConfigTool extends connect(store)(LitElement) {
     var { columns = [] } = this.config || {}
 
     return html`
-      <ul tree @click=${e => this.onClick(e)}>
+      <ul tree @click=${e => this.onClick(e)} @contextmenu=${e => this.onContextMenu(e)}>
         <li collapsed>
           <a>columns</a>
           <ul>
@@ -106,6 +120,12 @@ export class GristConfigTool extends connect(store)(LitElement) {
 
       target.toggleAttribute('collapsed')
     }
+  }
+
+  onContextMenu(e) {
+    e.preventDefault()
+
+    ContextMenu.show(null, e.pageX, e.pageY)
   }
 }
 
