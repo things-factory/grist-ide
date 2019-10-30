@@ -83,3 +83,7 @@ ul[tree] > li > a {
 [tree] li a:focus + ul ul::before {
   border-color: #000; /*connector color on hover*/
 }
+
+[tree] li[collapsed] > ul {
+  display: none;
+}

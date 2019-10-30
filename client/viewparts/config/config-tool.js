@@ -64,20 +64,12 @@ export class GristConfigTool extends connect(store)(LitElement) {
     )
   }
 
-  // appendable,
-  // insertable,
-  // selectable,
-  // handlers: {
-  //   click: getHandler(click),
-  //   dblclick: getHandler(dblclick)
-  // }
-
   render() {
     var { columns = [] } = this.config || {}
 
     return html`
-      <ul tree>
-        <li>
+      <ul tree @click=${e => this.onClick(e)}>
+        <li collapsed>
           <a>columns</a>
           <ul>
             ${columns.map(column => this.renderColumn(column))}
@@ -88,7 +80,9 @@ export class GristConfigTool extends connect(store)(LitElement) {
         </li>
         <li>
           <a>sorters</a>
-          ${this.renderSorters()}
+          <ul>
+            ${this.renderSorters()}
+          </ul>
         </li>
         <li>
           <a>pagination</a>
@@ -102,6 +96,16 @@ export class GristConfigTool extends connect(store)(LitElement) {
         <li><a>imex</a></li>
       </ul>
     `
+  }
+
+  onClick(e) {
+    var target = e.target
+
+    if (target.tagName == 'A') {
+      target = target.parentElement
+
+      target.toggleAttribute('collapsed')
+    }
   }
 }
 
