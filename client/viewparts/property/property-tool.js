@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit-element'
 import '@material/mwc-icon'
 import '../style/style-tool'
+import '../../elements/property-editor'
 
 export class GristPropertyTool extends LitElement {
   static get styles() {
@@ -26,27 +27,56 @@ export class GristPropertyTool extends LitElement {
           border: 1px solid black;
           box-sizing: border-box;
         }
+
+        [content] > * {
+          display: none;
+
+          width: 100%;
+          height: 100%;
+
+          overflow: hidden;
+        }
+
+        [content] > *[active] {
+          display: block;
+        }
       `
     ]
   }
 
   static get properties() {
-    return {}
+    return {
+      page: String
+    }
   }
 
   render() {
+    var page = this.page || 'property-editor'
+
     return html`
-      <div>
-        <mwc-icon>local_mall</mwc-icon>
-        <mwc-icon>style</mwc-icon>
-        <mwc-icon>description</mwc-icon>
-        <mwc-icon>edit</mwc-icon>
+      <div @click=${e => this.changePage(e)}>
+        <mwc-icon data-page="property-editor">local_mall</mwc-icon>
+        <mwc-icon data-page="style">style</mwc-icon>
+        <mwc-icon data-page="description">description</mwc-icon>
+        <mwc-icon data-page="edit">edit</mwc-icon>
       </div>
 
       <div content>
-        <grist-style-tool></grist-style-tool>
+        <property-editor ?active=${page == 'property-editor'}></property-editor>
+        <grist-style-tool ?active=${page == 'style'}></grist-style-tool>
+        <div ?active=${page == 'description'}>description</div>
+        <div ?active=${page == 'edit'}>edit</div>
       </div>
     `
+  }
+
+  changePage(e) {
+    var target = e.target
+    var page = target.getAttribute('data-page')
+
+    if (page) {
+      this.page = page
+    }
   }
 }
 
