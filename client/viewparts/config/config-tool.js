@@ -4,6 +4,8 @@ import { store } from '@things-factory/shell'
 
 import TreeStyle from '!!text-loader!./tree-style.css'
 import { ContextMenu } from '../../elements/context-menu'
+import { NodeBase } from '../../elements/nodes'
+import { UPDATE_GRIST_CONFIG_CURRENT_NODE } from '../../actions/grist-ide'
 
 export class GristConfigTool extends connect(store)(LitElement) {
   static get styles() {
@@ -32,7 +34,14 @@ export class GristConfigTool extends connect(store)(LitElement) {
   static get properties() {
     return {
       config: Object /* grist configuration */,
+      nodeTree: Array,
       node: Object
+    }
+  }
+
+  updated(changes) {
+    if (changes.has('config')) {
+      this.nodeTree = NodeBase.buildNode('grist', this.config)
     }
   }
 
@@ -41,73 +50,27 @@ export class GristConfigTool extends connect(store)(LitElement) {
     this.node = state.grist.node
   }
 
-  renderSorters() {
-    var sorters = this.config.sorters || []
-
-    return sorters.map(
-      sorter => html`
-        <li><a data-type="sorter" data-name=${sorter.name}>${sorter.name}-${sorter.descending ? 'desc' : 'asc'}</a></li>
-      `
-    )
-  }
-
-  renderColumn(column) {
-    var { name, type } =
-      column.type !== 'gutter'
-        ? {
-            name: column.name,
-            type: 'column'
-          }
-        : {
-            name: column.gutterName,
-            type: 'gutter'
-          }
-
+  renderNode(node) {
     return html`
-      <li><a data-type=${type} data-name=${name}>${name}</a></li>
+      <li ?collapsed=${!node.isLeaf} data-type=${node.type} data-name=${node.name} .node=${node}>
+        <a ?focus=${this.node === node}>${node.name}</a>
+        ${node.isLeaf
+          ? html``
+          : html`
+              <ul>
+                ${(node.children || []).map(node => this.renderNode(node))}
+              </ul>
+            `}
+      </li>
     `
   }
 
-  renderList() {
-    var { fields = [] } = this.config.list || {}
-
-    return fields.map(
-      field => html`
-        <li><a>${field}</a></li>
-      `
-    )
-  }
-
   render() {
-    var { columns = [] } = this.config || {}
+    var tree = this.nodeTree || { children: [] }
 
     return html`
       <ul tree @click=${e => this.onClick(e)} @contextmenu=${e => this.onContextMenu(e)}>
-        <li collapsed>
-          <a>columns</a>
-          <ul>
-            ${columns.map(column => this.renderColumn(column))}
-          </ul>
-        </li>
-        <li>
-          <a>rows</a>
-        </li>
-        <li>
-          <a>sorters</a>
-          <ul>
-            ${this.renderSorters()}
-          </ul>
-        </li>
-        <li>
-          <a>pagination</a>
-        </li>
-        <li>
-          <a>list</a>
-        </li>
-        <li>
-          <a>grid</a>
-        </li>
-        <li><a>imex</a></li>
+        ${tree.children.map(node => this.renderNode(node))}
       </ul>
     `
   }
@@ -120,6 +83,15 @@ export class GristConfigTool extends connect(store)(LitElement) {
 
       target.toggleAttribute('collapsed')
     }
+
+    while (!target.hasAttribute('data-type')) {
+      target = target.parentElement
+    }
+
+    store.dispatch({
+      type: UPDATE_GRIST_CONFIG_CURRENT_NODE,
+      node: target.node
+    })
   }
 
   onContextMenu(e) {

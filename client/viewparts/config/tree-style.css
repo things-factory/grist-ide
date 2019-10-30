@@ -69,18 +69,18 @@ ul[tree] > li > a {
 
 [tree] li a:hover,
 [tree] li a:hover + ul li a,
-[tree] li a:focus,
-[tree] li a:focus + ul li a {
+[tree] li a[focus],
+[tree] li a[focus] + ul li a {
   background-color: rgba(115, 188, 28, 0.8);
   color: #fff;
 }
 
 [tree] li a:hover + ul li::after,
-[tree] li a:focus + ul li::after,
+[tree] li a[focus] + ul li::after,
 [tree] li a:hover + ul li::before,
-[tree] li a:focus + ul li::before [tree] li a:hover + ul::before,
-[tree] li a:focus + ul::before [tree] li a:hover + ul ul::before,
-[tree] li a:focus + ul ul::before {
+[tree] li a[focus] + ul li::before [tree] li a:hover + ul::before,
+[tree] li a[focus] + ul::before [tree] li a:hover + ul ul::before,
+[tree] li a[focus] + ul ul::before {
   border-color: #000; /*connector color on hover*/
 }
 
