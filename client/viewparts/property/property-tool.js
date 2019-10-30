@@ -17,6 +17,11 @@ export class GristPropertyTool extends LitElement {
           overflow: auto;
         }
 
+        mwc-icon[active] {
+          color: white;
+          background-color: red;
+        }
+
         [content] {
           flex: 1;
           width: 100%;
@@ -55,17 +60,17 @@ export class GristPropertyTool extends LitElement {
 
     return html`
       <div @click=${e => this.changePage(e)}>
-        <mwc-icon data-page="property-editor">local_mall</mwc-icon>
-        <mwc-icon data-page="style">style</mwc-icon>
-        <mwc-icon data-page="description">description</mwc-icon>
-        <mwc-icon data-page="edit">edit</mwc-icon>
+        <mwc-icon data-page="property-editor" ?active=${page == 'property-editor'}>local_mall</mwc-icon>
+        <mwc-icon data-page="style" ?active=${page == 'style'}>style</mwc-icon>
+        <mwc-icon data-page="description" ?active=${page == 'description'}>description</mwc-icon>
+        <mwc-icon data-page="edit" ?active=${page == 'edit'}>edit</mwc-icon>
       </div>
 
       <div content>
         <property-editor ?active=${page == 'property-editor'}></property-editor>
         <grist-style-tool ?active=${page == 'style'}></grist-style-tool>
-        <div ?active=${page == 'description'}>description</div>
-        <div ?active=${page == 'edit'}>edit</div>
+        <div ?active=${page == 'description'}>Description</div>
+        <div ?active=${page == 'edit'}>Data Fetch Handler</div>
       </div>
     `
   }
