@@ -5,7 +5,7 @@ import { store } from '@things-factory/shell'
 import TreeStyle from '!!text-loader!./tree-style.css'
 import { ContextMenu } from '../../elements/context-menu'
 import { NodeBase } from '../../elements/nodes'
-import { UPDATE_GRIST_CONFIG_CURRENT_NODE } from '../../actions/grist-ide'
+import { UPDATE_GRIST_CURRENT_NODE, UPDATE_GRIST_CURRENT_PROPERTIES } from '../../actions/grist-ide'
 
 export class GristConfigTool extends connect(store)(LitElement) {
   static get styles() {
@@ -35,7 +35,8 @@ export class GristConfigTool extends connect(store)(LitElement) {
     return {
       config: Object /* grist configuration */,
       nodeTree: Array,
-      node: Object
+      node: Object,
+      properties: Object
     }
   }
 
@@ -48,6 +49,7 @@ export class GristConfigTool extends connect(store)(LitElement) {
   stateChanged(state) {
     this.config = state.grist.config
     this.node = state.grist.node
+    this.properties = state.grist.properties
   }
 
   renderNode(node) {
@@ -93,7 +95,7 @@ export class GristConfigTool extends connect(store)(LitElement) {
     }
 
     store.dispatch({
-      type: UPDATE_GRIST_CONFIG_CURRENT_NODE,
+      type: UPDATE_GRIST_CURRENT_NODE,
       node: target.node
     })
   }
@@ -112,7 +114,7 @@ export class GristConfigTool extends connect(store)(LitElement) {
     e.preventDefault()
 
     store.dispatch({
-      type: UPDATE_GRIST_CONFIG_CURRENT_NODE,
+      type: UPDATE_GRIST_CURRENT_NODE,
       node: target.node
     })
 

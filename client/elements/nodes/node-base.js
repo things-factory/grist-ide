@@ -78,6 +78,13 @@ export class NodeBase {
 
   build() {}
 
+  export() {
+    return this.children.reduce((sum, child) => {
+      sum[child.type] = child.export()
+      return sum
+    }, {})
+  }
+
   static buildNode(type, target) {
     return new (NodeBase.registry[type] || NodeBase)(target)
   }

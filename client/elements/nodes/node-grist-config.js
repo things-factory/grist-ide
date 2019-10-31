@@ -9,6 +9,13 @@ export class NodeGristConfig extends NodeBase {
     return 'grist'
   }
 
+  export() {
+    return this.children.reduce((sum, child) => {
+      sum[child.type] = child.export()
+      return sum
+    }, {})
+  }
+
   build() {
     var target = this.target
 

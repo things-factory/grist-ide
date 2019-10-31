@@ -14,17 +14,15 @@ export class PropertyEditor extends LitElement {
     return [
       css`
         :host {
-          display: block;
-
-          width: 100%;
-          height: 100%;
-
-          overflow: hidden;
+          display: flex;
         }
 
-        record-view {
+        record-view-body {
+          flex: 1;
           width: 100%;
-          height: 100%;
+
+          margin: 0;
+          padding: 0;
         }
       `
     ]
@@ -32,9 +30,42 @@ export class PropertyEditor extends LitElement {
 
   render() {
     return html`
-      <record-view .columns=${this.columns} .record=${this.record} .rowIndex=${this.rowIndex}></record-view>
+      <record-view-body
+        .columns=${this.columns}
+        .record=${this.record}
+        .rowIndex=${this.rowIndex}
+        @field-change=${e => this.onFieldChange(e)}
+      ></record-view-body>
     `
   }
+
+  onFieldChange(e) {
+    var { before, after, column } = e.detail
+    var value = {
+      ...this.record,
+      [column.name]: after
+    }
+
+    this.dispatchEvent(
+      new CustomEvent('change', {
+        detail: value
+      })
+    )
+  }
+
+  // onOK(e) {
+  //   var value = e.detail
+
+  //   this.dispatchEvent(
+  //     new CustomEvent('change', {
+  //       detail: value
+  //     })
+  //   )
+  // }
+
+  // onReset(e) {}
+
+  // onCancel(e) {}
 }
 
 customElements.define('property-editor', PropertyEditor)

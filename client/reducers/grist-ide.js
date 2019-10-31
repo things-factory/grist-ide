@@ -1,7 +1,8 @@
 import {
   UPDATE_GRIST_CONFIG,
   UPDATE_GRIST_FETCH_HANDLER,
-  UPDATE_GRIST_CONFIG_CURRENT_NODE
+  UPDATE_GRIST_CURRENT_NODE,
+  UPDATE_GRIST_CURRENT_PROPERTIES
 } from '../actions/grist-ide.js'
 
 const noop = () => {}
@@ -9,7 +10,8 @@ const noop = () => {}
 const INITIAL_STATE = {
   config: {},
   fetchHandler: noop,
-  node: {}
+  node: {},
+  properties: {}
 }
 
 const grist = (state = INITIAL_STATE, action) => {
@@ -26,10 +28,22 @@ const grist = (state = INITIAL_STATE, action) => {
         fetchHandler: action.fetchHandler
       }
 
-    case UPDATE_GRIST_CONFIG_CURRENT_NODE:
+    case UPDATE_GRIST_CURRENT_NODE:
       return {
         ...state,
-        node: action.node
+        node: action.node,
+        properties: action.node.target
+      }
+
+    case UPDATE_GRIST_CURRENT_PROPERTIES:
+      if (state.node) {
+        /* 변경된 속성을 현재 노드에 적용한다. */
+        state.node.target = action.properties
+      }
+
+      return {
+        ...state,
+        properties: action.properties
       }
 
     default:

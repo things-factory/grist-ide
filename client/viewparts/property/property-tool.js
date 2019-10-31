@@ -5,6 +5,7 @@ import { store } from '@things-factory/shell'
 import '@material/mwc-icon'
 import '../style/style-tool'
 import '../../elements/property-editor'
+import { UPDATE_GRIST_CURRENT_PROPERTIES } from '../../actions/grist-ide'
 
 import { buildColumn } from '@things-factory/grist-ui/client/configure/column-builder'
 
@@ -58,7 +59,8 @@ export class GristPropertyTool extends connect(store)(LitElement) {
     return {
       page: String,
       node: Object,
-      spec: Object
+      spec: Object,
+      properties: Object
     }
   }
 
@@ -77,13 +79,21 @@ export class GristPropertyTool extends connect(store)(LitElement) {
         <property-editor
           ?active=${page == 'property-editor'}
           .columns=${this.columns}
-          .record=${this.node.target}
+          .record=${this.properties}
+          @change=${e => this.onChangeProperties(e)}
         ></property-editor>
         <grist-style-tool ?active=${page == 'style'}></grist-style-tool>
         <div ?active=${page == 'description'}>Description</div>
         <div ?active=${page == 'edit'}>Data Fetch Handler</div>
       </div>
     `
+  }
+
+  stateChanged(state) {
+    this.node = state.grist.node
+    this.spec = this.node && this.node.spec
+    this.columns = this.spec && this.spec.map(column => buildColumn(column))
+    this.properties = state.grist.properties
   }
 
   changePage(e) {
@@ -95,10 +105,13 @@ export class GristPropertyTool extends connect(store)(LitElement) {
     }
   }
 
-  stateChanged(state) {
-    this.node = state.grist.node
-    this.spec = this.node && this.node.spec
-    this.columns = this.spec && this.spec.map(column => buildColumn(column))
+  onChangeProperties(e) {
+    var value = e.detail
+
+    store.dispatch({
+      type: UPDATE_GRIST_CURRENT_PROPERTIES,
+      properties: value
+    })
   }
 }
 

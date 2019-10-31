@@ -53,6 +53,42 @@ export class NodeColumn extends NodeBase {
           editable: true,
           align: 'left'
         }
+      },
+      {
+        type: 'boolean',
+        name: 'hidden',
+        header: 'hidden',
+        record: {
+          editable: true,
+          align: 'center'
+        }
+      },
+      {
+        type: 'boolean',
+        name: 'sortable',
+        header: 'sortable',
+        record: {
+          editable: true,
+          align: 'center'
+        }
+      },
+      {
+        type: 'integer',
+        name: 'width',
+        header: 'width',
+        record: {
+          editable: true,
+          align: 'right'
+        }
+      },
+      {
+        type: 'function',
+        name: 'validation',
+        header: 'validation',
+        record: {
+          editable: true,
+          align: 'right'
+        }
       }
     ]
   }
