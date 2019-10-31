@@ -99,8 +99,6 @@ export class GristPropertyTool extends connect(store)(LitElement) {
     this.node = state.grist.node
     this.spec = this.node && this.node.spec
     this.columns = this.spec && this.spec.map(column => buildColumn(column))
-
-    console.log('targt', this.node.target)
   }
 }
 
