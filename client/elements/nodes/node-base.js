@@ -1,8 +1,6 @@
 export class NodeBase {
   constructor(target) {
     this.target = target
-
-    this.build()
   }
 
   static registry = {}
@@ -12,59 +10,16 @@ export class NodeBase {
   }
 
   get contextMenu() {
-    return [
-      {
-        label: 'Open'
-      },
-      {
-        label: 'Open in New Window',
-        disabled: true
-      },
-      '--',
-      {
-        label: 'Reply'
-      },
-      {
-        label: 'Favorite',
-        icon: 'star'
-      },
-      {
-        label: 'Social',
-        menus: [
-          {
-            label: 'Comment'
-          },
-          {
-            label: 'Share',
-            icon: 'share',
-            menus: [
-              {
-                label: 'Twitter'
-              },
-              {
-                label: 'Facebook'
-              },
-              {
-                label: 'Google+'
-              },
-              {
-                label: 'Email'
-              }
-            ]
-          }
-        ]
-      },
-      '--',
-      {
-        label: 'Save'
-      },
-      {
-        label: 'Rename'
-      },
-      {
-        label: 'Delete'
-      }
-    ]
+    return
+  }
+
+  get target() {
+    return this._target
+  }
+
+  set target(value) {
+    this._target = value
+    this.build()
   }
 
   get name() {
@@ -93,6 +48,28 @@ export class NodeBase {
 
   get isLeaf() {
     return false
+  }
+
+  get spec() {
+    return [
+      {
+        type: 'string',
+        name: 'type',
+        header: 'type',
+        record: {
+          align: 'center'
+        }
+      },
+      {
+        type: 'string',
+        name: 'name',
+        header: 'name',
+        record: {
+          editable: true,
+          align: 'left'
+        }
+      }
+    ]
   }
 
   addChild(child) {

@@ -1,9 +1,14 @@
 import { LitElement, html, css } from 'lit-element'
+import { connect } from 'pwa-helpers/connect-mixin.js'
+import { store } from '@things-factory/shell'
+
 import '@material/mwc-icon'
 import '../style/style-tool'
 import '../../elements/property-editor'
 
-export class GristPropertyTool extends LitElement {
+import { buildColumn } from '@things-factory/grist-ui/client/configure/column-builder'
+
+export class GristPropertyTool extends connect(store)(LitElement) {
   static get styles() {
     return [
       css`
@@ -51,7 +56,9 @@ export class GristPropertyTool extends LitElement {
 
   static get properties() {
     return {
-      page: String
+      page: String,
+      node: Object,
+      spec: Object
     }
   }
 
@@ -67,7 +74,11 @@ export class GristPropertyTool extends LitElement {
       </div>
 
       <div content>
-        <property-editor ?active=${page == 'property-editor'}></property-editor>
+        <property-editor
+          ?active=${page == 'property-editor'}
+          .columns=${this.columns}
+          .record=${this.node.target}
+        ></property-editor>
         <grist-style-tool ?active=${page == 'style'}></grist-style-tool>
         <div ?active=${page == 'description'}>Description</div>
         <div ?active=${page == 'edit'}>Data Fetch Handler</div>
@@ -82,6 +93,14 @@ export class GristPropertyTool extends LitElement {
     if (page) {
       this.page = page
     }
+  }
+
+  stateChanged(state) {
+    this.node = state.grist.node
+    this.spec = this.node && this.node.spec
+    this.columns = this.spec && this.spec.map(column => buildColumn(column))
+
+    console.log('targt', this.node.target)
   }
 }
 

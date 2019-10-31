@@ -12,7 +12,7 @@ export class NodeColumns extends NodeBase {
   build() {
     var columns = this.target
 
-    this._children = columns.map(column => NodeBase.buildNode('column', column))
+    this._children = columns.map(column => NodeBase.buildNode(column.type == 'gutter' ? 'gutter' : 'column', column))
   }
 }
 

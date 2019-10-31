@@ -1,13 +1,13 @@
 import { NodeBase } from './node-base'
-import { getRenderers } from '@things-factory/grist-ui'
+import { getGutters } from '@things-factory/grist-ui'
 
-export class NodeColumn extends NodeBase {
+export class NodeGutter extends NodeBase {
   get type() {
-    return this.target.type == 'gutter' ? 'gutter' : 'column'
+    return 'gutter'
   }
 
   get name() {
-    return this.target.type == 'gutter' ? this.target.gutterName : this.target.name
+    return this.target.gutterName
   }
 
   get contextMenu() {
@@ -27,22 +27,21 @@ export class NodeColumn extends NodeBase {
   get spec() {
     return [
       {
-        type: 'select',
+        type: 'string',
         name: 'type',
         header: 'type',
         record: {
-          editable: true,
-          align: 'center',
-          options: Object.keys(getRenderers())
+          align: 'center'
         }
       },
       {
-        type: 'string',
-        name: this.type == 'gutter' ? 'gutterName' : 'name',
-        header: this.type == 'gutter' ? 'gutter name' : 'name',
+        type: 'select',
+        name: 'gutterName',
+        header: 'gutter name',
         record: {
           editable: true,
-          align: 'left'
+          align: 'left',
+          options: Object.keys(getGutters())
         }
       },
       {
@@ -58,4 +57,4 @@ export class NodeColumn extends NodeBase {
   }
 }
 
-NodeBase.register('column', NodeColumn)
+NodeBase.register('gutter', NodeGutter)

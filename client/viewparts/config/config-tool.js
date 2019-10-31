@@ -116,7 +116,9 @@ export class GristConfigTool extends connect(store)(LitElement) {
       node: target.node
     })
 
-    ContextMenu.show(target.node.contextMenu, e.pageX, e.pageY)
+    var contextMenu = target.node && target.node.contextMenu
+
+    contextMenu && ContextMenu.show(contextMenu, e.pageX, e.pageY)
   }
 }
 

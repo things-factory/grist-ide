@@ -1,5 +1,6 @@
 export * from './node-base'
 
+export * from './node-gutter'
 export * from './node-column'
 export * from './node-columns'
 export * from './node-sorter'

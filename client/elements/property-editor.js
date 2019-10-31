@@ -32,7 +32,7 @@ export class PropertyEditor extends LitElement {
 
   render() {
     return html`
-      <record-view .columns=${this.columns} .record=${this.object} .rowIndex=${this.rowIndex}></record-view>
+      <record-view .columns=${this.columns} .record=${this.record} .rowIndex=${this.rowIndex}></record-view>
     `
   }
 }
