@@ -84,8 +84,12 @@ export class GristConfigTool extends connect(store)(LitElement) {
       target.toggleAttribute('collapsed')
     }
 
-    while (!target.hasAttribute('data-type')) {
+    while (target && !target.hasAttribute('data-type')) {
       target = target.parentElement
+    }
+
+    if (!target) {
+      return
     }
 
     store.dispatch({
@@ -95,9 +99,24 @@ export class GristConfigTool extends connect(store)(LitElement) {
   }
 
   onContextMenu(e) {
+    var target = e.target
+
+    while (target && !target.hasAttribute('data-type')) {
+      target = target.parentElement
+    }
+
+    if (!target) {
+      return
+    }
+
     e.preventDefault()
 
-    ContextMenu.show(null, e.pageX, e.pageY)
+    store.dispatch({
+      type: UPDATE_GRIST_CONFIG_CURRENT_NODE,
+      node: target.node
+    })
+
+    ContextMenu.show(target.node.contextMenu, e.pageX, e.pageY)
   }
 }
 

@@ -12,7 +12,59 @@ export class NodeBase {
   }
 
   get contextMenu() {
-    return
+    return [
+      {
+        label: 'Open'
+      },
+      {
+        label: 'Open in New Window',
+        disabled: true
+      },
+      '--',
+      {
+        label: 'Reply'
+      },
+      {
+        label: 'Favorite',
+        icon: 'star'
+      },
+      {
+        label: 'Social',
+        menus: [
+          {
+            label: 'Comment'
+          },
+          {
+            label: 'Share',
+            icon: 'share',
+            menus: [
+              {
+                label: 'Twitter'
+              },
+              {
+                label: 'Facebook'
+              },
+              {
+                label: 'Google+'
+              },
+              {
+                label: 'Email'
+              }
+            ]
+          }
+        ]
+      },
+      '--',
+      {
+        label: 'Save'
+      },
+      {
+        label: 'Rename'
+      },
+      {
+        label: 'Delete'
+      }
+    ]
   }
 
   get name() {
