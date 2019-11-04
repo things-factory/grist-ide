@@ -28,11 +28,11 @@
     "migration:revert": "node ./node_modules/typeorm/cli.js migration:revert"
   },
   "dependencies": {
-    "@things-factory/apptool-ui": "*",
-    "@things-factory/context-ui": "*",
-    "@things-factory/grist-ui": "*",
-    "@things-factory/layout-ui": "*",
-    "@things-factory/shell": "*"
+    "@things-factory/apptool-ui": "^1.0.0-alpha.1",
+    "@things-factory/context-ui": "^1.0.0-alpha.1",
+    "@things-factory/grist-ui": "^1.0.0-alpha.1",
+    "@things-factory/layout-ui": "^1.0.0-alpha.1",
+    "@things-factory/shell": "^1.0.0-alpha.1"
   },
   "devDependencies": {}
 }
