@@ -2,7 +2,12 @@ process.on('bootstrap-module-history-fallback' as any, (app, fallbackOption) => 
   /*
    * fallback white list를 추가할 수 있다
    *
-   * ex) fallbackOption.whiteList.push('/authcheck')
+   * ex)fallbackOption.whiteList.push(
+          ...[
+            'xxx',
+            'yyy'
+          ].map(path => `^\/${path}($|[/?#])`)
+        )
    */
 })
 
