@@ -1,6 +1,7 @@
 dist-client/
 dist-server/
 node_modules/
+logs/
 licenses/
 attachments/
 ormconfig.js

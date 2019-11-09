@@ -6,6 +6,7 @@ test/
 dist-client/
 .vscode
 .prettierrc
+logs/
 .editorconfig
 .gitignore
 .git
